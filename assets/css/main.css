@@ -1,0 +1,53 @@
+table {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+
+    -ms-word-break: break-all;
+    word-break: break-all;
+}
+.container-fluid {
+    padding-right: 0px;
+    padding-left: 0px;
+}
+    
+#additional-options {
+    padding: 20px;
+    display:none;
+}
+
+#additional-options span {
+    font-size:20px;
+}
+
+#headerimg img {
+    width:120px;
+}
+
+.severity_info {
+    color: #00d412;
+}
+
+.severity_warn {
+    color: #ffbf00;
+}
+
+.severity_error {
+    color: #ff0000;
+}
+
+nav {
+    width:100%;
+}
+
+#maintable {
+    table-layout: fixed;
+    width: 100%;
+}
+
+#singletable {
+    margin-top:30px;
+}
+
+#clienttable {
+    margin-top:30px;
+}

@@ -1,0 +1,1 @@
+fetchEntry(window.location.href.split("/").pop());

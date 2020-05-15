@@ -1,0 +1,92 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"> 
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css"> 
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">   
+    <title>Dashboard - avologo</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+        <div class="d-flex flex-grow-1">
+            <div id='headerimg'>
+                <a href="/" class="navbar-brand">
+                    <img src='/static/img/avologo.png' />
+                </a>
+            </div>
+            <form id="searchform" class="mr-2 my-auto w-100 d-inline-block order-1">
+                <div class="input-group">
+                    <input type="text" class="form-control border border-right-0" id="searchbox" placeholder="Search...">
+                    <span class="input-group-append">
+                        <button class="btn btn-outline-light border border-left-0" id="additional-options-toggle" type="button">
+                            <i class="fa fa-arrows-v"></i>
+                        </button>
+
+                        <button class="btn btn-outline-light border border-left-0" id="search-button" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <button class="navbar-toggler order-0" type="button" data-toggle="collapse" data-target="#navbar7">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse flex-shrink-1 flex-grow-0 order-last" id="navbar7">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/clients">Clients</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="bg-primary" id="additional-options">
+            <div class="row">
+                <div class="col-md-4">
+                    <span>Additional Options</span><br /><br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <select id="hostfilter" class="custom-select">
+                        <option selected="">Filter by Host</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select id="sourcefilter" class="custom-select">
+                        <option selected="">Filter by Source</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <select id="severityfilter" class="custom-select">
+                        <option value="" selected="">Filter by Severity</option>
+                        <option value="3">ERROR</option>
+                        <option value="2">WARN</option>
+                        <option value="1">INFO</option>
+                    </select>
+                </div>
+        </div>
+        </div>
+        <table class="table table-striped table-dark" id="maintable">
+            <thead>
+                <tr>
+                    <th style="width: 20%">Timestamp</th>
+                    <th style="width: 45%">Message</th>
+                    <th style="width: 25%">Source</th>
+                    <th style="width: 10%">Severity</th>
+                </tr>
+            </thead>
+            <tbody id="logresults">
+                
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<html>
+<head>
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/font-awesome.min.css"> 
+    <link rel="stylesheet" type="text/css" href="/static/css/main.css"> 
+    <link rel="shortcut icon" href="/static/img/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon">   
+    <title>View - avologo</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-md navbar-dark bg-primary">
+        <div class="d-flex flex-grow-1">
+            <div id='headerimg'>
+                <a href="/" class="navbar-brand">
+                    <img src='/static/img/avologo.png' />
+                </a>
+            </div>
+        </div>
+        <button class="navbar-toggler order-0" type="button" data-toggle="collapse" data-target="#navbar7">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse flex-shrink-1 flex-grow-0 order-last" id="navbar7">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/clients">Clients</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    
+
+    <div class="container text-center">
+        <table class="table table-striped table-dark" id="singletable">
+            <thead>
+                <tr>
+                    <th style="width: 25%">Field</th>
+                    <th style="width: 75%">Value</th>
+                </tr>
+            </thead>
+            <tbody id="entryfields">
+                <tr id="field_timestamp"></tr>
+                <tr id="field_host"></tr>
+                <tr id="field_source"></tr>
+                <tr id="field_message"></tr>
+                <tr id="field_severity"></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="/static/js/jquery.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/common.js"></script>
+    <script src="/static/js/single.js"></script>
+</body>
+</html>
