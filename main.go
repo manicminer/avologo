@@ -15,14 +15,23 @@ func main() {
 	// Parse command line arguments
 	parser := argparse.NewParser("avologo", "A fast, lightweight, and modular log aggregation tool")
 	mode := parser.String("m", "mode", &argparse.Options{Required: true, Help: "server/client"})
+	config_path := parser.String("c", "config", &argparse.Options{Required: false, Help: "path to alternate config file"})
+
 	err := parser.Parse(os.Args)
 	if (err != nil) {
 		fmt.Print(parser.Usage(err))
 		return
 	}
 
-	// Parse configuration file
-	global_cfg = parseConfig("/etc/avologo.conf")
+	// Config path
+	global_cfg_path = "/etc/avologo.conf"
+	if (*config_path != "") {
+		if (!fileExists(*config_path)) {
+			fmt.Println("Error: specified config file not found")
+			return
+		}
+		global_cfg_path = *config_path
+	}
 
 	// Determine appropriate mode to initialize in
 	if (*mode == "server") {
@@ -42,10 +51,10 @@ func initializeServer() {
 	e := echo.New()
 	e.HideBanner = true
 	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("/opt/avologo/templates/*.html")),
+		templates: template.Must(template.ParseGlob("./templates/*.html")),
 	}
 	e.Renderer = renderer
-	e.Static("/static", "/opt/avologo/assets")
+	e.Static("/static", "./assets")
 
 	// Initialize GET handlers
 	for endpoint, handler := range getHandlers {
@@ -56,11 +65,19 @@ func initializeServer() {
 		e.POST(endpoint, handler)
 	}
 
-	db_con, db_err = getDBHandle()
+	// Parse configuration file and get db handle
+	if (fileExists(global_cfg_path)) {
+		global_cfg = parseConfig(global_cfg_path)
+		db_con, db_err = getDBHandle()
+
+		// Start listening
+		e.Logger.Fatal(e.Start(global_cfg.Server.Host + ":" + strconv.Itoa(global_cfg.Server.Port)))
+		db_con.Close()
+	} else {
+		// Listen on default settings
+		e.Logger.Fatal(e.Start("0.0.0.0:4747"))
+	}
 	
-	// Start listening
-	e.Logger.Fatal(e.Start(global_cfg.Server.Host + ":" + strconv.Itoa(global_cfg.Server.Port)))
-	db_con.Close()
 }
 
 /*

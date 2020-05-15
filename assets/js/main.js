@@ -14,7 +14,7 @@ fetchResults("");
     Refresh every 5 seconds
 */
 window.setInterval(function() {
-    fetchResultsSince($("#searchbox").val(), lastUpdate);
+    fetchResultsSince($("#searchbox").val(), -5);
 }, 5000);
 
 /*

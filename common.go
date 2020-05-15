@@ -2,6 +2,7 @@ package main
 
 import (
 	"strings"
+	"os"
 )
 
 /*
@@ -28,4 +29,15 @@ func calculateSeverity(message string) int64 {
 	}
 
 	return severity
+}
+
+/*
+	Check if file exists
+*/
+func fileExists(filename string) bool {
+    info, err := os.Stat(filename)
+    if (os.IsNotExist(err)) {
+        return false
+    }
+    return !info.IsDir()
 }

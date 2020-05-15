@@ -14,11 +14,12 @@ import (
 */
 var getHandlers = map[string]echo.HandlerFunc {
 	"/": rootHandlerG,
-	"/clients" : clientsHandlerG,
+	"/clients": clientsHandlerG,
+	"/firstRun": firstRunHandlerG,
 	"/view/:id": viewHandlerG,
 	"/log/:id": logHandlerG,
 	"/query": queryHandlerG,
-	"/queryClients" : queryClientsHandlerG,
+	"/queryClients": queryClientsHandlerG,
 }
 
 /*
@@ -27,13 +28,24 @@ var getHandlers = map[string]echo.HandlerFunc {
 var postHandlers = map[string]echo.HandlerFunc {
 	"/log": logHandlerP,
 	"/logRaw": lawRawHandlerP,
+	"/testConnection": testConnectionHandlerP,
 }
 
 /*
 	Dashboard page
 */
 func rootHandlerG(c echo.Context) error {
+	if (!fileExists(global_cfg_path)) {
+		return c.Redirect(http.StatusTemporaryRedirect, "/firstRun")
+	}
 	return c.Render(http.StatusOK, "index.html", map[string]interface{}{})
+}
+
+/*
+	Dashboard page
+*/
+func firstRunHandlerG(c echo.Context) error {
+	return c.Render(http.StatusOK, "firstRun.html", map[string]interface{}{})
 }
 
 /*
@@ -101,6 +113,16 @@ func lawRawHandlerP(c echo.Context) (err error) {
 	// Write to database
 	writeLogEntry(log)
 	return
+}
+
+
+/*
+	POST /testConnection
+*/
+func testConnectionHandlerP(c echo.Context) (err error) {
+	conn := new(TestConnection)
+	c.Bind(conn);
+	return c.JSON(http.StatusOK, testDBConnection(conn))
 }
 
 /*

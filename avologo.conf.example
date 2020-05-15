@@ -2,7 +2,7 @@
 # Only required on avologo master node
 server:
     host: "0.0.0.0"
-    port: 8000
+    port: 4747
 
 # Database credentials
 # Only required on avologo master node
@@ -15,7 +15,7 @@ database:
 
 # Client configuration
 client:
-    destination: "127.0.0.1:8000"
+    destination: "127.0.0.1:4747"
     friendly_name: ""
     watch:
         - "/var/log/messages"

@@ -10,6 +10,7 @@ import (
 */
 var (
 	global_cfg *AvologoConfig
+	global_cfg_path string
 )
 
 /*
