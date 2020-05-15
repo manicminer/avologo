@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"strconv"
 	"os"
+	_ "github.com/lib/pq"
 )
 
 func main() {
@@ -41,10 +42,10 @@ func initializeServer() {
 	e := echo.New()
 	e.HideBanner = true
 	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("templates/*.html")),
+		templates: template.Must(template.ParseGlob("/opt/avologo/templates/*.html")),
 	}
 	e.Renderer = renderer
-	e.Static("/static", "assets")
+	e.Static("/static", "/opt/avologo/assets")
 
 	// Initialize GET handlers
 	for endpoint, handler := range getHandlers {
