@@ -85,3 +85,18 @@ func getDBHandle() (*sql.DB, error) {
 
 	return context, err
 }
+
+/* 
+	Sets up database initially with schema defined in schema.go
+*/
+func checkDBSetup() {
+	rows, _ := db_con.Query("SELECT to_regclass('public.log');")
+	rows.Next()
+
+	// Update schema if log table doesn't exists
+	var exists string
+	rows.Scan(&exists)
+	if (exists == "") {
+		db_con.Query(dbSchema)
+	}
+}

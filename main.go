@@ -69,6 +69,7 @@ func initializeServer() {
 	if (fileExists(global_cfg_path)) {
 		global_cfg = parseConfig(global_cfg_path)
 		db_con, db_err = getDBHandle()
+		checkDBSetup()
 
 		// Start listening
 		e.Logger.Fatal(e.Start(global_cfg.Server.Host + ":" + strconv.Itoa(global_cfg.Server.Port)))
