@@ -34,9 +34,6 @@ CREATE TABLE public.log (
     severity integer
 );
 
-
-ALTER TABLE public.log OWNER TO brad;
-
 --
 -- Name: log_id_seq; Type: SEQUENCE; Schema: public; 
 --

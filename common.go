@@ -4,15 +4,27 @@ import (
 	"strings"
 )
 
+/*
+	Attempt to determine severity of message from keywords
+*/
 func calculateSeverity(message string) int64 {
 	var severity int64 = 1
 	lower := strings.ToLower(message)
 
-	if (strings.Contains(lower, "warn") || strings.Contains(lower, "warning")) {
-		severity = 2
+	// Check warning keywords
+	for _, keyword := range global_cfg.Client.WarningKeywords {
+		if (strings.Contains(lower, keyword)) {
+			severity = 2
+			break
+		}
 	}
-	if (strings.Contains(lower, "fatal") || strings.Contains(lower, "error")) {
-		severity = 3
+
+	// Check error keywords
+	for _, keyword := range global_cfg.Client.ErrorKeywords {
+		if (strings.Contains(lower, keyword)) {
+			severity = 3
+			break
+		}
 	}
 
 	return severity
