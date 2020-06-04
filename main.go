@@ -10,18 +10,30 @@ import (
 	_ "github.com/lib/pq"
 )
 
+var AvologoVersion string = "0.1.1"
+
 func main() {
 
 	// Parse command line arguments
 	parser := argparse.NewParser("avologo", "A fast, lightweight, and modular log aggregation tool")
+	version := parser.Flag("v", "version", &argparse.Options{Required: false, Help: "show current version"})
 	mode := parser.String("m", "mode", &argparse.Options{Required: true, Help: "server/client"})
 	config_path := parser.String("c", "config", &argparse.Options{Required: false, Help: "path to alternate config file"})
 
 	err := parser.Parse(os.Args)
+
+	// Print version if requested
+	if (*version) {
+		fmt.Println("avologo version " + AvologoVersion)
+		return
+	}
+
+	// Error parsing parameters
 	if (err != nil) {
 		fmt.Print(parser.Usage(err))
 		return
 	}
+
 
 	// Config path
 	global_cfg_path = "/etc/avologo.conf"
@@ -32,6 +44,9 @@ func main() {
 		}
 		global_cfg_path = *config_path
 	}
+
+	// Parse config
+	global_cfg = parseConfig(global_cfg_path)
 
 	// Determine appropriate mode to initialize in
 	if (*mode == "server") {
@@ -51,10 +66,10 @@ func initializeServer() {
 	e := echo.New()
 	e.HideBanner = true
 	renderer := &TemplateRenderer{
-		templates: template.Must(template.ParseGlob("./templates/*.html")),
+		templates: template.Must(template.ParseGlob("/opt/avologo/templates/*.html")),
 	}
 	e.Renderer = renderer
-	e.Static("/static", "./assets")
+	e.Static("/static", "/opt/avologo/assets")
 
 	// Initialize GET handlers
 	for endpoint, handler := range getHandlers {
@@ -66,8 +81,7 @@ func initializeServer() {
 	}
 
 	// Parse configuration file and get db handle
-	if (fileExists(global_cfg_path)) {
-		global_cfg = parseConfig(global_cfg_path)
+	if (global_cfg != nil) {
 		db_con, db_err = getDBHandle()
 		checkDBSetup()
 
@@ -78,19 +92,22 @@ func initializeServer() {
 		// Listen on default settings
 		e.Logger.Fatal(e.Start("0.0.0.0:4747"))
 	}
-	
+
 }
 
 /*
 	Client mode
 */
 func initializeClient() {
-	
-	// Spawn threads for watching files
-	for _, path := range global_cfg.Client.Watch {
-		go monitorFile(path)
-	}
+	if (global_cfg != nil) {
+		// Spawn threads for watching files
+		for _, path := range global_cfg.Client.Watch {
+			go monitorFile(path)
+		}
 
-	// Main thread sleep
-	for { }
+		// Main thread sleep
+		for { }
+	} else {
+		fmt.Println("Error: no valid config loaded")
+	}
 }

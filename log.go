@@ -151,7 +151,6 @@ func performQuery(query LogQuery) []LogEntry {
 
 	// Build and execute query
 	queryString := fmt.Sprintf("SELECT id, host, message, source, severity, timestamp FROM log %s %s LIMIT %d OFFSET %d", whereClause, orderClause, query.Limit, query.Offset)
-	fmt.Println(queryString)
 	rows, _ := db_con.Query(queryString)
 
 	// Loop through rows

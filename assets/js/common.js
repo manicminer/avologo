@@ -77,12 +77,6 @@ function formatSeverity(severity) {
     }
 }
 
-function round(value, decimals) {
-    return Number(Math.round(value+'e'+decimals)+'e-'+decimals);
-}
-  
-  
-
 function formatRow(entry) {
     return "<td><a title='View Entry' href='/view/" + entry.id + "'>" + entry.timeformatted +
             "</a></td><td>" + entry.message +
@@ -93,7 +87,7 @@ function formatRow(entry) {
 function formatClientRow(entry) {
     return "<td>" + entry.host +
             "</td><td>" + entry.count +
-            "</td><td>" + entry.rate.toFixed(5) +
+            "</td><td>" + Math.round(entry.rate) +
             " / hour</td><td>" + entry.lastmessage +
             "</td>";
 }
