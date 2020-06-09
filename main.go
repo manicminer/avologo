@@ -43,8 +43,10 @@ func main() {
 			return
 		}
 		global_cfg_path = *config_path
+	}
 
-		// Parse config
+	// Parse config
+	if (fileExists(global_cfg_path)) {
 		global_cfg = parseConfig(global_cfg_path)
 	}
 
