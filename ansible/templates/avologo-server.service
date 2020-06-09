@@ -1,0 +1,10 @@
+[Unit]
+Description=Avologo server service
+
+[Service]
+Type=simple
+ExecStart=/opt/avologo/avologo --mode server
+User=root
+
+[Install]
+WantedBy=multi-user.target

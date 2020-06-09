@@ -1,0 +1,6 @@
+[master]
+my.avologo.server
+
+[children]
+my.first.client
+my.second.client

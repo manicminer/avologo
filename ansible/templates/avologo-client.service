@@ -1,0 +1,10 @@
+[Unit]
+Description=Avologo client service
+
+[Service]
+Type=simple
+ExecStart=/opt/avologo/avologo --mode client
+User=root
+
+[Install]
+WantedBy=multi-user.target

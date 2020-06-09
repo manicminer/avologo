@@ -1,0 +1,17 @@
+ansible_user: ""
+ansible_ssh_pass: ""
+ansible_sudo_pass: ""
+
+postgres_user: ""
+postgres_password: ""
+
+avologo_server: "my.avologo.server"
+avologo_dir: "/opt/avologo"
+avologo_port: 4747
+
+avologo_watch_my.first.client:
+   - /var/log/xrdp-sesman.log
+
+avologo_watch_my.second.client:
+   - /var/log/syslog
+

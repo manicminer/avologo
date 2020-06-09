@@ -1,0 +1,29 @@
+# Server configuration
+# Only required on avologo master node
+server:
+    host: "0.0.0.0"
+    port: {{ avologo_port }} 
+
+# Database credentials
+# Only required on avologo master node
+database:
+    host: "{{ avologo_server }}"
+    port: 5432
+    user: "{{ postgres_user }}"
+    password: "{{ postgres_password }}"
+    dbname: "avologo"
+
+# Client configuration
+client:
+    destination: "{{ avologo_server }}:{{ avologo_port }}"
+    friendly_name: "{{ inventory_hostname }}"
+    watch:
+{% for file in lookup('vars', 'avologo_watch_{{ inventory_hostname }}') %}
+        - {{ file }}
+{% endfor %}
+    error_keywords:
+        - "error"
+        - "fatal"
+    warning_keywords:
+        - "warning"
+        - "warn"

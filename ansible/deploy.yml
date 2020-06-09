@@ -1,0 +1,81 @@
+---
+- hosts: children 
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Create avologo user
+      user:
+        name: avologo
+        state: present
+
+    - name: Ensure avologo directory exists
+      file:
+        path: "{{ avologo_dir }}"
+        state: directory
+        owner: avologo
+
+    - name: Copy avologo executable 
+      copy:
+        src: "dist/avologo"
+        dest: "{{ avologo_dir }}/avologo"
+        owner: avologo
+        mode: 0755
+  
+    - name: Copy avologo.conf
+      template:
+        src: "templates/avologo.conf.j2"
+        dest: "/etc/avologo.conf"
+        owner: avologo
+
+    - name: Copy avologo-client service file
+      template:
+        src: "templates/avologo-client.service"
+        dest: "/etc/systemd/system/avologo-client.service"
+
+    - name: Start and enable avologo
+      systemd:
+        name: avologo-client
+        daemon_reload: yes
+        enabled: yes
+        state: restarted
+
+- hosts: master
+  become: yes
+  become_method: sudo
+  tasks:
+    - name: Create avologo user
+      user:
+        name: avologo
+        state: present
+
+    - name: Ensure avologo directory exists
+      file:
+        path: "{{ avologo_dir }}"
+        state: directory
+        owner: avologo
+
+    - name: Copy avologo executable 
+      copy:
+        src: "dist/avologo"
+        dest: "{{ avologo_dir }}/avologo"
+        owner: avologo
+        mode: 0755
+  
+    - name: Copy avologo.conf
+      template:
+        src: "templates/avologo.conf.j2"
+        dest: "/etc/avologo.conf"
+        owner: avologo
+
+    - name: Copy avologo-server service file
+      template:
+        src: "templates/avologo-server.service"
+        dest: "/etc/systemd/system/avologo-server.service"
+
+    - name: Start and enable avologo
+      systemd:
+        name: avologo-server
+        daemon_reload: yes
+        enabled: yes
+        state: restarted
+       
