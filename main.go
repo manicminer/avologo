@@ -10,7 +10,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var AvologoVersion string = "0.1.1"
+var AvologoVersion string = "0.1.2"
 
 func main() {
 
@@ -43,10 +43,10 @@ func main() {
 			return
 		}
 		global_cfg_path = *config_path
-	}
 
-	// Parse config
-	global_cfg = parseConfig(global_cfg_path)
+		// Parse config
+		global_cfg = parseConfig(global_cfg_path)
+	}
 
 	// Determine appropriate mode to initialize in
 	if (*mode == "server") {
@@ -106,7 +106,7 @@ func initializeClient() {
 		}
 
 		// Main thread sleep
-		for { }
+		for { select { } }
 	} else {
 		fmt.Println("Error: no valid config loaded")
 	}
