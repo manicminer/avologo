@@ -1,16 +1,17 @@
 package main
 
 import (
-	"github.com/labstack/echo"
-	"github.com/akamensky/argparse"
-	"html/template"
 	"fmt"
-	"strconv"
-	"os"
+	"github.com/akamensky/argparse"
+	"github.com/labstack/echo"
 	_ "github.com/lib/pq"
+	"html/template"
+	"os"
+	"path/filepath"
+	"strconv"
 )
 
-var AvologoVersion string = "0.1.2"
+var AvologoVersion string = "0.1.2-1manicminer"
 
 func main() {
 
@@ -23,22 +24,21 @@ func main() {
 	err := parser.Parse(os.Args)
 
 	// Print version if requested
-	if (*version) {
+	if *version {
 		fmt.Println("avologo version " + AvologoVersion)
 		return
 	}
 
 	// Error parsing parameters
-	if (err != nil) {
+	if err != nil {
 		fmt.Print(parser.Usage(err))
 		return
 	}
 
-
 	// Config path
 	global_cfg_path = "/etc/avologo.conf"
-	if (*config_path != "") {
-		if (!fileExists(*config_path)) {
+	if *config_path != "" {
+		if !fileExists(*config_path) {
 			fmt.Println("Error: specified config file not found")
 			return
 		}
@@ -46,16 +46,16 @@ func main() {
 	}
 
 	// Parse config
-	if (fileExists(global_cfg_path)) {
+	if fileExists(global_cfg_path) {
 		global_cfg = parseConfig(global_cfg_path)
 	}
 
 	// Determine appropriate mode to initialize in
-	if (*mode == "server") {
-		initializeServer();
+	if *mode == "server" {
+		initializeServer()
 
-	} else if (*mode == "client") {
-		initializeClient();
+	} else if *mode == "client" {
+		initializeClient()
 	} else {
 		fmt.Println("Invalid mode specified")
 	}
@@ -83,7 +83,7 @@ func initializeServer() {
 	}
 
 	// Parse configuration file and get db handle
-	if (global_cfg != nil) {
+	if global_cfg != nil {
 		db_con, db_err = getDBHandle()
 		checkDBSetup()
 
@@ -101,14 +101,22 @@ func initializeServer() {
 	Client mode
 */
 func initializeClient() {
-	if (global_cfg != nil) {
+	if global_cfg != nil {
 		// Spawn threads for watching files
 		for _, path := range global_cfg.Client.Watch {
-			go monitorFile(path)
+			files, err := filepath.Glob(path)
+			if err != nil {
+				fmt.Printf("Error: glob fail for path %q: %v\n", path, err)
+			}
+			for _, f := range files {
+				go monitorFile(f)
+			}
 		}
 
 		// Main thread sleep
-		for { select { } }
+		for {
+			select {}
+		}
 	} else {
 		fmt.Println("Error: no valid config loaded")
 	}
